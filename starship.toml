@@ -11,6 +11,7 @@ $line_break\
 $python\
 $character"""
 
+
 [directory]
 style = "blue"
 truncate_to_repo = false
@@ -45,6 +46,7 @@ style = "yellow"
 
 [aws]
 symbol = "aws "
+style = "bright-green"
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\] '
 
 [python]

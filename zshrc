@@ -2,7 +2,7 @@
 
 # load zgenom
 source "$HOME/.zgenom/zgenom.zsh"
-export EDITOR='nvim'
+export EDITOR='vim'
 export VEDITOR='code'
 
 export ZGEN_RESET_ON_CHANGE=(${HOME}/.zshrc ${HOME}/.zshrc.local)
@@ -70,3 +70,7 @@ if [ -e "$HOME/.zshrc.local" ]; then
   source "$HOME/.zshrc.local"
 fi
 
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

@@ -1,0 +1,14 @@
+export path
+
+alias python=python3
+alias pip=pip3
+alias upstream='gco main && gf upstream && gm upstream/main'
+alias kk='cd ~/sandbox/aws-cdk'
+
+export EDITOR='vim'
+
+source ~/.nvm/nvm.sh
+nvm use 20.11.1
+
+export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$GOPATH/bin
