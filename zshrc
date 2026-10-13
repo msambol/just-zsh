@@ -1,7 +1,7 @@
 # vim: fdm=marker sw=2 ts=2 sts=2 tw=80 nofoldenable
 
 # 1. Environment & Homebrew
-export EDITOR='nvim'
+export EDITOR='vim'
 export VEDITOR='code'
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 export HOMEBREW_PREFIX="/opt/homebrew"
