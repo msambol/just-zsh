@@ -10,6 +10,13 @@ function brew_install() {
   fi
 }
 
+function brew_install_cask() {
+  if ! brew list --cask $1 &>/dev/null; then
+    echo "Installing $1..."
+    brew install --cask $1
+  fi
+}
+
 # symlink a file or directory to home. first argument is required and references the file or directory source, relative to
 # the current dir. second argument is optional. if provided it will be the target for linking. if not provided, default
 # target is `$HOME/.<first argument>`. When the first argument is a directory and the target already exists, the
@@ -55,6 +62,9 @@ prereqs=('starship' 'fzf' 'bat' 'gh' 'direnv' 'rg' 'fd' 'eza' 'fnm' 'coreutils')
 for prereq in $prereqs; do
   brew_install $prereq
 done
+
+# nerd font for eza/starship icons (select it in iTerm: Profiles > Text > Font)
+brew_install_cask font-jetbrains-mono-nerd-font
 
 # link the things
 link zshrc
