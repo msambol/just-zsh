@@ -1,0 +1,14 @@
+# ~/.zshrc.local -- machine-specific config, not tracked in git.
+#
+# Created from just-zsh/zshrc.local.base by install.sh (only if missing).
+# Sourced last by ~/.zshrc, so anything here overrides the shared settings
+# in ~/.zsh. Put work aliases, paths, and anything private here.
+
+# -- PATH --
+# path=(~/some/bin $path)
+
+# -- Environment --
+# export AWS_PROFILE=
+
+# -- Aliases --
+# alias proj='cd ~/sandbox/some-project'

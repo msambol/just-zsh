@@ -1,7 +1,6 @@
 #!/usr/bin/env zsh
 
 [[ ! -d $(brew --prefix) ]] && echo "homebrew is required" && exit 1
-[[ ! -f $HOME/.zshrc.local ]] && echo "export path" > ~/.zshrc.local
 
 function brew_install() {
   if [[ ! -d $(brew --prefix $1) ]]; then
@@ -70,6 +69,13 @@ brew_install_cask font-jetbrains-mono-nerd-font
 link zshrc
 link zsh
 link starship.toml .config/starship.toml
+
+# machine-local config is copied, not linked, so local edits stay out of git
+if [[ ! -f $HOME/.zshrc.local ]]; then
+  echo -n "Creating $HOME/.zshrc.local from zshrc.local.base..."
+  cp $PWD/zshrc.local.base $HOME/.zshrc.local
+  echo " done."
+fi
 
 echo ""
 echo "... all set. Reload your terminal or open a new tab."
