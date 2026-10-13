@@ -46,8 +46,10 @@ function g() {
   fi
 }
 
-# Complete g like git
-compdef g=git
+# Complete g like git (guarded: only run if completion system is available)
+if type compdef >/dev/null 2>&1; then
+  compdef g=git
+fi
 
 function gbsu() {
   branch=$(git symbolic-ref --short -q HEAD)

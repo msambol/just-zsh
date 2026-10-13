@@ -1,29 +1,16 @@
 # vim: fdm=marker sw=2 ts=2 sts=2 tw=80 nofoldenable
 
-# load zgenom
-source "$HOME/.zgenom/zgenom.zsh"
-export EDITOR='vim'
+# 1. Environment & Homebrew
+export EDITOR='nvim'
 export VEDITOR='code'
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+export HOMEBREW_PREFIX="/opt/homebrew"
 
-export ZGEN_RESET_ON_CHANGE=(${HOME}/.zshrc ${HOME}/.zshrc.local)
+# 2. Load Zgenom
+source "$HOME/.zgenom/zgenom.zsh"
 
-# check for updates every 7 days
-zgenom autoupdate --background
-
-[ -d /usr/local/bin ] && path=(/usr/local/bin $path)
-[ -d /opt/homebrew/bin ] && path=(/opt/homebrew/bin $path)
-eval "$(brew shellenv)"
-
+# 3. Zgenom Plugin Block
 if ! zgenom saved; then
-  echo "Creating zgenom save state..."
-
-  zgenom compdef
-
-  # extensions
-  zgenom load jandamm/zgenom-ext-eval
-  zgenom load jandamm/zgenom-ext-release
-
-  # omz
   zgenom ohmyzsh
   zgenom ohmyzsh plugins/git
   zgenom ohmyzsh plugins/ssh-agent
@@ -31,46 +18,56 @@ if ! zgenom saved; then
   zgenom ohmyzsh --completion plugins/docker-compose
   [[ "$(uname -s)" = Darwin ]] && zgenom ohmyzsh plugins/macos
 
-  # qol
   zgenom load djui/alias-tips
   zgenom load hlissner/zsh-autopair
   zgenom load rupa/z
-
-  # fzf
-  zgenom load junegunn/fzf shell
   zgenom load urbainvaes/fzf-marks
-
-  # evals
-  zgenom eval --name direnv <<<"$(direnv hook zsh)"
-  zgenom eval --name starship <<<"$(starship init zsh)"
-
-  zgenom load "$HOME/.zsh"
-
-  zgenom load zsh-users/zsh-syntax-highlighting
-  zgenom load zsh-users/zsh-history-substring-search
   zgenom load zsh-users/zsh-completions
+  zgenom load zsh-users/zsh-history-substring-search
 
-  [[ -x $(whence -cp upterm) ]] && zgenom eval --name upterm <<<"$(upterm completion zsh)"
-  [[ -d $(brew --prefix)/share/zsh/site-functions ]] && zgenom load --completion $(brew --prefix)/share/zsh/site-functions
+  # The "Big Two" must be at the end of the load list
+  zgenom load zsh-users/zsh-autosuggestions
+  zgenom load zsh-users/zsh-syntax-highlighting
 
+  zgenom compdef
   zgenom save
-
-# Compile zsh files
-  zgenom compile "$HOME/.zshrc"
-
-  echo "...done"
 fi
 
-[ -d $HOME/.zgenom/bin ] && path=(~/.zgenom/bin $path)
-[ -d ~/.local ] && path=(~/.local/bin $path)
-[[ -f $(brew --prefix asdf)/libexec/asdf.sh ]] && source $(brew --prefix asdf)/libexec/asdf.sh
+# 4. Lazy Load Node Manager (fnm)
+_load_node_tools() {
+  unalias node npm npx 2>/dev/null
+  eval "$(fnm env --use-on-cd)"
+  unset -f _load_node_tools
+}
+alias node='_load_node_tools && node'
+alias npm='_load_node_tools && npm'
+alias npx='_load_node_tools && npx'
 
-# default editors
+# 5. Visuals & Tools
+eval "$(direnv hook zsh)"
+eval "$(starship init zsh)"
+
+# Initialize fzf Key Bindings
+if [ -d "/opt/homebrew/opt/fzf" ]; then
+  source "/opt/homebrew/opt/fzf/shell/completion.zsh"
+  source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+fi
+
+# 6. Paths & Local Config (This is where your aliases live)
+path=(~/.zgenom/bin ~/.local/bin $path)
+
 if [ -e "$HOME/.zshrc.local" ]; then
   source "$HOME/.zshrc.local"
 fi
 
+# 7. Syntax Highlighting Styles (set after all plugins & aliases are loaded)
+ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[function]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=red,bold'
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Source local just-zsh plugin if present
+if [ -f "$HOME/sandbox/just-zsh/zsh/local.plugin.zsh" ]; then
+  source "$HOME/sandbox/just-zsh/zsh/local.plugin.zsh"
+fi

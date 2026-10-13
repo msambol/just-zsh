@@ -9,7 +9,8 @@ if [[ "$TERM" == xterm ]]; then
   export TERM=xterm-256color
 fi
 
-CUR=${0:a:h}
+# Resolve directory of this file even when sourced
+CUR=${${(%):-%N}:A:h}
 source "$CUR/functions.zsh"
 source "$CUR/aliases.zsh"
 # source "$CUR/jump.zsh"

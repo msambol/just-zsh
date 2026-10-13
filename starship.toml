@@ -1,3 +1,7 @@
+# 1. Performance - Give Starship more time for heavy repos
+command_timeout = 2000
+
+# 2. Global Prompt Layout
 format = """
 $username\
 $hostname\
@@ -11,7 +15,6 @@ $line_break\
 $python\
 $character"""
 
-
 [directory]
 style = "blue"
 truncate_to_repo = false
@@ -23,9 +26,11 @@ vimcmd_symbol = "[❮](green)"
 
 [git_branch]
 format = "[$branch]($style)"
-style = "bright-black"
+style = "bright-cyan"
 
 [git_status]
+# Performance: Skip checking submodules in deep repos like terraform
+ignore_submodules = true
 format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
 style = "cyan"
 conflicted = "​"
@@ -46,8 +51,8 @@ style = "yellow"
 
 [aws]
 symbol = "aws "
-style = "bright-green"
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\] '
+style = "green"
 
 [python]
 format = "[$virtualenv]($style) "
