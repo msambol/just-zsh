@@ -53,8 +53,13 @@ if [ -d "/opt/homebrew/opt/fzf" ]; then
   source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
 fi
 
-# 6. Paths & Local Config (This is where your aliases live)
+# 6. Paths, just-zsh modules, then machine-local config (loaded last so it wins)
 path=(~/.zgenom/bin ~/.local/bin $path)
+
+# ~/.zsh is symlinked to this repo's zsh/ dir by install.sh
+if [ -f "$HOME/.zsh/local.plugin.zsh" ]; then
+  source "$HOME/.zsh/local.plugin.zsh"
+fi
 
 if [ -e "$HOME/.zshrc.local" ]; then
   source "$HOME/.zshrc.local"
@@ -66,8 +71,3 @@ ZSH_HIGHLIGHT_STYLES[alias]='fg=green,bold'
 ZSH_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
 ZSH_HIGHLIGHT_STYLES[function]='fg=green,bold'
 ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=red,bold'
-
-# Source local just-zsh plugin if present
-if [ -f "$HOME/sandbox/just-zsh/zsh/local.plugin.zsh" ]; then
-  source "$HOME/sandbox/just-zsh/zsh/local.plugin.zsh"
-fi
